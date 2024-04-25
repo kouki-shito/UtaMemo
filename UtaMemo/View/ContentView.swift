@@ -21,7 +21,7 @@ struct ContentView: View {
           .tag(Tab.settings)
       }//:TabView
       .tabViewStyle(.page(indexDisplayMode: .never))
-      .animation(.easeOut,value: activeTab)
+      //.animation(.default,value: activeTab)
 
       CustomTabBar()
 
@@ -59,9 +59,9 @@ struct TabItem :View {
     VStack{
       Image(systemName: tab.systemImage)
         .font(.title2)
-        .foregroundColor(activeTab == tab ? tint : .black)
+        .foregroundColor(activeTab == tab ? tint : .primary)//DarkMode Ok
         .frame(width: 35,height: 35)
-
+      
     }
     .frame(maxWidth:.infinity)
     .contentShape(Rectangle())
