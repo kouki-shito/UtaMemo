@@ -22,7 +22,7 @@ struct ContentView: View {
             .tag(Tab.settings)
         }//:TabView
         .tabViewStyle(.page(indexDisplayMode: .never))
-        //.animation(.default,value: activeTab)
+        .animation(.default,value: activeTab)
 
         CustomTabBar()
 
