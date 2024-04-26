@@ -9,25 +9,27 @@ import SwiftUI
 
 struct ContentView: View {
   @State private var activeTab :Tab = .home
+  
   var body: some View {
     NavigationStack{
-      VStack(spacing:0){
+        VStack(spacing:0){
 
-        TabView(selection:$activeTab) {
-          FolderPage()
-            .tag(Tab.folder)
-          Home()
-            .tag(Tab.home)
-          SettingsPage()
-            .tag(Tab.settings)
-        }//:TabView
-        .tabViewStyle(.page(indexDisplayMode: .never))
-        .animation(.default,value: activeTab)
+          TabView(selection:$activeTab) {
 
-        CustomTabBar()
+            FolderPage()
+              .tag(Tab.folder)
+            Home()
+              .tag(Tab.home)
+            SettingsPage()
+              .tag(Tab.settingsPage)
+          }//:TabView
+          .navigationTitle(activeTab == .home ? "HOME" :activeTab == .folder ? "Folder" :activeTab == .settingsPage ? "Settings" :"Error")
+          .tabViewStyle(.page(indexDisplayMode: .never))
+          //.animation(.default,value: activeTab)
+          CustomTabBar()
 
-      }//:VStack
-    }
+        }//:VStack
+    }//:NavigationStack
   }//:BODY
 
   //EASY Custom Tab View

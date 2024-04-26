@@ -17,6 +17,7 @@
 		1EFA877B2BD91C2E003009A4 /* CustomTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA877A2BD91C2E003009A4 /* CustomTab.swift */; };
 		1EFA877F2BD93773003009A4 /* Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA877E2BD93773003009A4 /* Home.swift */; };
 		1EFA87832BDA8113003009A4 /* floatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA87822BDA8113003009A4 /* floatingButton.swift */; };
+		1EFA87872BDBB492003009A4 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA87862BDBB492003009A4 /* NoteModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		1EFA877A2BD91C2E003009A4 /* CustomTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTab.swift; sourceTree = "<group>"; };
 		1EFA877E2BD93773003009A4 /* Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Home.swift; sourceTree = "<group>"; };
 		1EFA87822BDA8113003009A4 /* floatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = floatingButton.swift; sourceTree = "<group>"; };
+		1EFA87862BDBB492003009A4 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,12 +86,12 @@
 		1EFA876D2BD903FA003009A4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				1EFA87822BDA8113003009A4 /* floatingButton.swift */,
 				1EFA87602BD8FD90003009A4 /* ContentView.swift */,
 				1EFA87712BD90510003009A4 /* EditNote.swift */,
 				1EFA87752BD907F2003009A4 /* SettingsPage.swift */,
 				1EFA87772BD908AD003009A4 /* FolderPage.swift */,
 				1EFA877E2BD93773003009A4 /* Home.swift */,
-				1EFA87822BDA8113003009A4 /* floatingButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -105,6 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				1EFA877A2BD91C2E003009A4 /* CustomTab.swift */,
+				1EFA87862BDBB492003009A4 /* NoteModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1EFA877B2BD91C2E003009A4 /* CustomTab.swift in Sources */,
+				1EFA87872BDBB492003009A4 /* NoteModel.swift in Sources */,
 				1EFA87722BD90510003009A4 /* EditNote.swift in Sources */,
 				1EFA87612BD8FD90003009A4 /* ContentView.swift in Sources */,
 				1EFA875F2BD8FD90003009A4 /* UtaMemoApp.swift in Sources */,

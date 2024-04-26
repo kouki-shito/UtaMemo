@@ -10,7 +10,7 @@ import SwiftUI
 enum Tab:String,CaseIterable {
   case folder = "folder"
   case home = "home"
-  case settings = "settings"
+  case settingsPage = "settings"
 
   var systemImage:String {
     switch self {
@@ -18,7 +18,7 @@ enum Tab:String,CaseIterable {
       return "folder"
     case .home:
       return "house"
-    case .settings:
+    case .settingsPage:
       return "gearshape"
     }
   }

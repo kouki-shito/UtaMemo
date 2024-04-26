@@ -10,10 +10,28 @@ import SwiftUI
 struct Home: View {
 
   var body: some View {
-    floatingButton()
-  }
+    NavigationStack {
+      VStack{
+//        Rectangle()
+//          .frame(width: 100,height: 100)
+//          .foregroundColor(.blue)
+
+        Spacer()
+        HStack{
+          Spacer()
+        }//:HStack
+      }//:VStack
+      .overlay(
+        floatingButton()
+          .padding(.bottom,30)
+          .padding(.trailing,30)
+        ,alignment: .bottomTrailing
+      )//:Overlay
+    }//:NavigationStack
+  }//:bodyView
+
 }
 
-#Preview {
+#Preview{
   Home()
 }
