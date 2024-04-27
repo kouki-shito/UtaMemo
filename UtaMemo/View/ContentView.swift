@@ -23,7 +23,7 @@ struct ContentView: View {
             SettingsPage()
               .tag(Tab.settingsPage)
           }//:TabView
-          .navigationTitle(activeTab == .home ? "HOME" :activeTab == .folder ? "Folder" :activeTab == .settingsPage ? "Settings" :"Error")
+          //.navigationTitle(activeTab == .home ? "HOME" :activeTab == .folder ? "Folder" :activeTab == .settingsPage ? "Settings" :"Error")
           .tabViewStyle(.page(indexDisplayMode: .never))
           //.animation(.default,value: activeTab)
           CustomTabBar()
