@@ -44,6 +44,7 @@ struct floatingButton: View {
       }//:ZTACKS
       .navigationDestination(isPresented: $isButtonActive) {
         EditNote()
+          .toolbar(.hidden)
       }
     }
   }

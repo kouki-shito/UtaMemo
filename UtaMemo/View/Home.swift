@@ -15,7 +15,6 @@ struct Home: View {
 //        Rectangle()
 //          .frame(width: 100,height: 100)
 //          .foregroundColor(.blue)
-
         Spacer()
         HStack{
           Spacer()
