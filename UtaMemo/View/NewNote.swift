@@ -1,4 +1,3 @@
-
 //
 //  EditNote.swift
 //  UtaMemo
@@ -10,18 +9,17 @@ import SwiftUI
 import UIKit
 import SwiftData
 
-struct EditNote: View {
+struct NewNote: View {
 
   @Environment(\.modelContext) var context
   @Environment(\.dismiss) private var dismiss
-
+  @State private var noteContent : String = ""
+  @State private var noteTitle : String = ""
   @State private var CanUndo : Bool = false
   @State private var CanRedo : Bool = false
   @FocusState var isFocussed : Bool
-  @Bindable var updateNote : NoteModel
 
   var body: some View {
-
     VStack(spacing:0){
       titleArea
       noteArea
@@ -36,11 +34,21 @@ struct EditNote: View {
 
 }//:View
 
-extension EditNote {
+extension NewNote {
 
+  private func addNote(){
+    let newNote = NoteModel(content: noteContent,title: noteTitle)
+    context.insert(newNote)
+  }
   private func saveNote(){
     try? context.save()
   }
+//  private func deleteNote(at offsets: IndexSet){
+//    for offset in offsets {
+//      let deleteNote = Notes[offset]
+//      context.delete(deleteNote)
+//    }
+//  }
 
   private var navigationArea : some View {
     HStack(alignment:.center){
@@ -49,7 +57,12 @@ extension EditNote {
         Button{
           if isFocussed == false{
             //Back Home
-            saveNote()
+            if noteContent == "" && noteTitle == ""{
+
+            }else{
+              addNote()
+            }
+
             dismiss()
           }else{
             //disable Note Focus
@@ -116,7 +129,7 @@ extension EditNote {
   }
 
   private var titleArea : some View {
-    TextField("題名", text: $updateNote.title)
+    TextField("題名", text: $noteTitle)
       .font(.title)
       .fontWeight(.heavy)
       .padding()
@@ -128,7 +141,7 @@ extension EditNote {
 
   private var noteArea : some View {
 
-    TextEditor(text: $updateNote.content)
+    TextEditor(text: $noteContent)
       .autocorrectionDisabled(true)
       .font(.title2)
       .fontWeight(.bold)

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1EEB34082BDE13D600326204 /* NoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB34072BDE13D600326204 /* NoteList.swift */; };
+		1EEB340A2BDE478B00326204 /* NewNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB34092BDE478B00326204 /* NewNote.swift */; };
 		1EFA875F2BD8FD90003009A4 /* UtaMemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA875E2BD8FD90003009A4 /* UtaMemoApp.swift */; };
 		1EFA87612BD8FD90003009A4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA87602BD8FD90003009A4 /* ContentView.swift */; };
 		1EFA87632BD8FD91003009A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EFA87622BD8FD91003009A4 /* Assets.xcassets */; };
@@ -21,6 +23,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1EEB34072BDE13D600326204 /* NoteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteList.swift; sourceTree = "<group>"; };
+		1EEB34092BDE478B00326204 /* NewNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNote.swift; sourceTree = "<group>"; };
 		1EFA875B2BD8FD90003009A4 /* UtaMemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UtaMemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EFA875E2BD8FD90003009A4 /* UtaMemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtaMemoApp.swift; sourceTree = "<group>"; };
 		1EFA87602BD8FD90003009A4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -88,10 +92,12 @@
 			children = (
 				1EFA87822BDA8113003009A4 /* floatingButton.swift */,
 				1EFA87602BD8FD90003009A4 /* ContentView.swift */,
-				1EFA87712BD90510003009A4 /* EditNote.swift */,
 				1EFA87752BD907F2003009A4 /* SettingsPage.swift */,
 				1EFA87772BD908AD003009A4 /* FolderPage.swift */,
 				1EFA877E2BD93773003009A4 /* Home.swift */,
+				1EEB34072BDE13D600326204 /* NoteList.swift */,
+				1EFA87712BD90510003009A4 /* EditNote.swift */,
+				1EEB34092BDE478B00326204 /* NewNote.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -191,6 +197,8 @@
 				1EFA87782BD908AD003009A4 /* FolderPage.swift in Sources */,
 				1EFA877F2BD93773003009A4 /* Home.swift in Sources */,
 				1EFA87832BDA8113003009A4 /* floatingButton.swift in Sources */,
+				1EEB34082BDE13D600326204 /* NoteList.swift in Sources */,
+				1EEB340A2BDE478B00326204 /* NewNote.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

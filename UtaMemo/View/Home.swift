@@ -11,21 +11,30 @@ struct Home: View {
 
   var body: some View {
     NavigationStack {
+
       VStack{
-//        Rectangle()
-//          .frame(width: 100,height: 100)
-//          .foregroundColor(.blue)
+        List{
+          Section{
+            NoteList()
+          }
+        }
+        .listStyle(.grouped)
+        .scrollContentBackground(.hidden)
+        
         Spacer()
-        HStack{
+        HStack {
           Spacer()
         }//:HStack
       }//:VStack
+      .frame(maxHeight: .infinity)
       .overlay(
         floatingButton()
           .padding(.bottom,30)
           .padding(.trailing,30)
         ,alignment: .bottomTrailing
       )//:Overlay
+      
+      
     }//:NavigationStack
   }//:bodyView
 
@@ -33,4 +42,5 @@ struct Home: View {
 
 #Preview{
   Home()
+    .modelContainer(for:NoteModel.self)
 }

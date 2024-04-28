@@ -10,10 +10,11 @@ import SwiftData
 
 @main
 struct UtaMemoApp: App {
+
   var body: some Scene {
     WindowGroup {
       ContentView()
     }
-    .modelContainer(for: NoteModel.self)
+    .modelContainer(for:NoteModel.self)
   }
 }

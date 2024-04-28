@@ -10,12 +10,15 @@ import SwiftData
 
 @Model
 final class NoteModel {
-  var content: String
+  var id : String = UUID().uuidString
+  var content: String = ""
+  var title : String = ""
   var createdAt: Date
   var updatedAt: Date
 
-  init(content: String) {
+  init(content: String,title:String) {
     self.content = content
+    self.title = title
     createdAt = Date()
     updatedAt = Date()
   }

@@ -13,9 +13,7 @@ struct ContentView: View {
   var body: some View {
     NavigationStack{
         VStack(spacing:0){
-
           TabView(selection:$activeTab) {
-
             FolderPage()
               .tag(Tab.folder)
             Home()
@@ -23,11 +21,8 @@ struct ContentView: View {
             SettingsPage()
               .tag(Tab.settingsPage)
           }//:TabView
-          //.navigationTitle(activeTab == .home ? "HOME" :activeTab == .folder ? "Folder" :activeTab == .settingsPage ? "Settings" :"Error")
           .tabViewStyle(.page(indexDisplayMode: .never))
-          //.animation(.default,value: activeTab)
           CustomTabBar()
-
         }//:VStack
     }//:NavigationStack
   }//:BODY
@@ -78,4 +73,5 @@ struct TabItem :View {
 
 #Preview {
   ContentView()
+    .modelContainer(for:NoteModel.self)
 }

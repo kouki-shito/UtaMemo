@@ -23,7 +23,6 @@ struct floatingButton: View {
 
         Button(){
           isButtonActive.toggle()
-          print(isButtonActive)
         }label: {
           Image(systemName: "plus.circle.fill")
             .resizable()
@@ -43,8 +42,9 @@ struct floatingButton: View {
         })
       }//:ZTACKS
       .navigationDestination(isPresented: $isButtonActive) {
-        EditNote()
+        NewNote()
           .toolbar(.hidden)
+
       }
     }
   }
