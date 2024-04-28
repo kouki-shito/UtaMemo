@@ -10,37 +10,33 @@ import SwiftUI
 struct Home: View {
 
   var body: some View {
-    NavigationStack {
 
-      VStack {
+    VStack {
 
-       NoteList()
+      NoteList()
+      Spacer()
+
+      HStack {
+
         Spacer()
-        HStack {
-          Spacer()
-        }//:HStack
 
-      }//:VStack
-      .toolbar{
-        EditButton()
-          .font(.title2)
-          .fontWeight(.bold)
-          .padding(.trailing,10)
-      }
-      .frame(maxHeight: .infinity)
-      .overlay(
-        floatingButton()
-          .padding(.bottom,30)
-          .padding(.trailing,30)
-        ,alignment: .bottomTrailing
-      )//:Overlay
+      }//:HS
 
-      .navigationDestination(
-        for: NoteModel.self) {updateNote in
-          EditNote(updateNote: updateNote)
-      }
-    }//:NavigationStack
-  }//:bodyView
+    }//:VS
+    .toolbar{
+      EditButton()
+        .font(.title2)
+        .fontWeight(.bold)
+        .padding(.trailing,10)
+    }
+    .frame(maxHeight: .infinity)
+    .overlay(
+      floatingButton()
+        .padding(.bottom,30)
+        .padding(.trailing,30)
+      ,alignment: .bottomTrailing
+    )//:Ov
+  }//:bd
 
 }
 

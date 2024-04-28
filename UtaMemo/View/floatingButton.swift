@@ -11,7 +11,7 @@ struct floatingButton: View {
   @State private var AnimatedButton : Bool = false
   @State private var isButtonActive : Bool = false
   var body: some View {
-    NavigationStack{
+
       ZStack {
         Group{
           Circle()
@@ -48,7 +48,7 @@ struct floatingButton: View {
       }
     }
   }
-}
+
 
 #Preview {
     floatingButton()

@@ -26,17 +26,11 @@ struct NoteList: View {
                 Text(noteList.content)
                   .multilineTextAlignment(.leading)
               }//:VStack
-              .navigationDestination(
-                for: NoteModel.self) {updateNote in
-                  EditNote(updateNote: updateNote)
-                    .toolbar(.hidden)
-                }
             }//:NAVI
           }//:ForEach
           .onDelete(perform:deleteNote)
         }//:Sec
       }//:List
-      
       .listStyle(.grouped)
       .scrollContentBackground(.hidden)
 
