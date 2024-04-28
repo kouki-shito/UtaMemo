@@ -14,7 +14,6 @@ struct EditNote: View {
 
   @Environment(\.modelContext) var context
   @Environment(\.dismiss) private var dismiss
-
   @State private var CanUndo : Bool = false
   @State private var CanRedo : Bool = false
   @FocusState var isFocussed : Bool

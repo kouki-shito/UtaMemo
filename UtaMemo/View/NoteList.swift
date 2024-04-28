@@ -10,24 +10,49 @@ import SwiftData
 
 struct NoteList: View {
   @Environment(\.modelContext) private var context
+  @State private var selectionValue: Int? = nil
   @Query private var Notes : [NoteModel]
 
   var body: some View {
-      ForEach(Notes){ noteList in
-        NavigationLink(value: noteList){
-          VStack{
-            Text(noteList.createdAt.formatted())
-            Text(noteList.title)
-            Text(noteList.content)
-          }//:VStack
-          .navigationDestination(
-            for: NoteModel.self) {updateNote in
-              EditNote(updateNote: updateNote)
-                .toolbar(.hidden)
-            }
-        }
-      }//:ForEach
-      .onDelete(perform:deleteNote)
+
+      List(selection:$selectionValue){
+        Section{
+          ForEach(Notes){ noteList in
+            NavigationLink(value: noteList){
+              VStack{
+                Text(noteList.title)
+                  .font(.title2)
+                  .fontWeight(.bold)
+                  .multilineTextAlignment(.leading)
+                Text(noteList.content)
+                  .multilineTextAlignment(.leading)
+              }//:VStack
+              .navigationDestination(
+                for: NoteModel.self) {updateNote in
+                  EditNote(updateNote: updateNote)
+                    .toolbar(.hidden)
+                }
+            }//:NAVI
+          }//:ForEach
+          .onDelete(perform:deleteNote)
+        }//:Sec
+      }//:List
+      .toolbar{
+        EditButton()
+//        Button(){
+//
+//        }label: {
+//          Image(systemName: "trash")
+//            .font(.title3)
+//            .padding(.bottom)
+//
+//
+//        }
+      }
+      .listStyle(.grouped)
+      .scrollContentBackground(.hidden)
+
+
   }//:body
 
   private func deleteNote(at offsets: IndexSet){
@@ -38,6 +63,8 @@ struct NoteList: View {
   }
 
 }//:View
+
+
 
 #Preview {
   Home()

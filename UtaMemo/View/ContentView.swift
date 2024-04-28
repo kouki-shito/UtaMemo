@@ -13,6 +13,7 @@ struct ContentView: View {
   var body: some View {
     NavigationStack{
         VStack(spacing:0){
+
           TabView(selection:$activeTab) {
             FolderPage()
               .tag(Tab.folder)
@@ -25,6 +26,7 @@ struct ContentView: View {
           CustomTabBar()
         }//:VStack
     }//:NavigationStack
+
   }//:BODY
 
   //EASY Custom Tab View

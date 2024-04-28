@@ -13,14 +13,7 @@ struct Home: View {
     NavigationStack {
 
       VStack{
-        List{
-          Section{
-            NoteList()
-          }
-        }
-        .listStyle(.grouped)
-        .scrollContentBackground(.hidden)
-        
+       NoteList()
         Spacer()
         HStack {
           Spacer()
@@ -33,8 +26,10 @@ struct Home: View {
           .padding(.trailing,30)
         ,alignment: .bottomTrailing
       )//:Overlay
-      
-      
+      .navigationDestination(
+        for: NoteModel.self) {updateNote in
+          EditNote(updateNote: updateNote)
+      }
     }//:NavigationStack
   }//:bodyView
 
