@@ -11,6 +11,7 @@ struct ContentView: View {
   @State private var activeTab :Tab = .home
   
   var body: some View {
+
     NavigationStack{
         VStack(spacing:0){
 

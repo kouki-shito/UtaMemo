@@ -12,13 +12,21 @@ struct Home: View {
   var body: some View {
     NavigationStack {
 
-      VStack{
+      VStack {
+
        NoteList()
         Spacer()
         HStack {
           Spacer()
         }//:HStack
+
       }//:VStack
+      .toolbar{
+        EditButton()
+          .font(.title2)
+          .fontWeight(.bold)
+          .padding(.trailing,10)
+      }
       .frame(maxHeight: .infinity)
       .overlay(
         floatingButton()
@@ -26,6 +34,7 @@ struct Home: View {
           .padding(.trailing,30)
         ,alignment: .bottomTrailing
       )//:Overlay
+
       .navigationDestination(
         for: NoteModel.self) {updateNote in
           EditNote(updateNote: updateNote)

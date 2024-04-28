@@ -43,12 +43,6 @@ extension NewNote {
   private func saveNote(){
     try? context.save()
   }
-//  private func deleteNote(at offsets: IndexSet){
-//    for offset in offsets {
-//      let deleteNote = Notes[offset]
-//      context.delete(deleteNote)
-//    }
-//  }
 
   private var navigationArea : some View {
     HStack(alignment:.center){

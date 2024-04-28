@@ -10,12 +10,11 @@ import SwiftData
 
 struct NoteList: View {
   @Environment(\.modelContext) private var context
-  @State private var selectionValue: Int? = nil
   @Query private var Notes : [NoteModel]
 
   var body: some View {
 
-      List(selection:$selectionValue){
+      List(){
         Section{
           ForEach(Notes){ noteList in
             NavigationLink(value: noteList){
@@ -37,18 +36,7 @@ struct NoteList: View {
           .onDelete(perform:deleteNote)
         }//:Sec
       }//:List
-      .toolbar{
-        EditButton()
-//        Button(){
-//
-//        }label: {
-//          Image(systemName: "trash")
-//            .font(.title3)
-//            .padding(.bottom)
-//
-//
-//        }
-      }
+      
       .listStyle(.grouped)
       .scrollContentBackground(.hidden)
 
