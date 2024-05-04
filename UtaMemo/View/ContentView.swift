@@ -13,15 +13,12 @@ struct ContentView: View {
     
     NavigationStack {
       VStack(spacing:0){
-
           Home()
-
       }
       .navigationDestination(
         for: NoteModel.self) {updateNote in
           EditNote(updateNote: updateNote)
             .toolbar(.hidden)
-
         }
     }//:V
   }//:Body

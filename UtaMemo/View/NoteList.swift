@@ -19,12 +19,11 @@ struct NoteList: View {
           ForEach(Notes){ noteList in
             NavigationLink(value: noteList){
               VStack{
-                Text(noteList.title)
+                Text(noteList.title == "" ? "タイトルなし": noteList.title)
                   .font(.title2)
                   .fontWeight(.bold)
                   .multilineTextAlignment(.leading)
-                Text(noteList.content)
-                  .multilineTextAlignment(.leading)
+                  .frame(height: 50)
               }//:VStack
             }//:NAVI
           }//:ForEach

@@ -15,11 +15,8 @@ struct Home: View {
 
       NoteList()
       Spacer()
-
       HStack {
-
         Spacer()
-
       }//:HS
 
     }//:VS
