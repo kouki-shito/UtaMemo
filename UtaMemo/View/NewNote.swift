@@ -17,7 +17,7 @@ struct NewNote: View {
   @State private var noteTitle : String = ""
   @State private var CanUndo : Bool = false
   @State private var CanRedo : Bool = false
-  @State private var range = NSRange()
+  @State private var gRanges : [NSRange] = []
   @FocusState var isFocussed : Bool
 
   var body: some View {
@@ -31,7 +31,9 @@ struct NewNote: View {
       navigationArea
       ,alignment: .top
     )
-
+    .onChange(of:isFocussed){
+      saveNote()
+    }
   }//:body
 
 }//:View
@@ -39,7 +41,7 @@ struct NewNote: View {
 extension NewNote {
 
   private func addNote(){
-    let newNote = NoteModel(content: noteContent,title: noteTitle)
+    let newNote = NoteModel(content: noteContent,title: noteTitle,GRange: gRanges)
     context.insert(newNote)
   }
   private func saveNote(){
@@ -130,67 +132,22 @@ extension NewNote {
       .fontWeight(.heavy)
       .padding()
       .focused($isFocussed)
-      .onChange(of: isFocussed){
-        saveNote()
-      }
   }
 
   private var noteArea : some View {
-
-    //TextEditor(text: $noteContent)
-    uiTextView(noteContent: $noteContent)
-    //      .autocorrectionDisabled(true)
-    //      .font(.title2)
-    //      .fontWeight(.bold)
-    //      .padding(.horizontal,20)
-    //      .focused($isFocussed)
-    //      .scrollContentBackground(.hidden)
-    //      .toolbar{
-    //        ToolbarItemGroup(placement:.keyboard){
-    //          //KeyBoardToolBar
-    //          Button{
-    //
-    //          }label: {
-    //            Image(systemName: "rectangle.inset.fill")
-    //              .foregroundColor(.yellow)
-    //              .font(.title2)
-    //            //.frame(width: 30,height: 30)
-    //          }
-    //          Spacer()
-    //          Button{
-    //
-    //          }label: {
-    //            Image(systemName: "pencil.circle")
-    //              .foregroundColor(.blue)
-    //              .font(.title2)
-    //            //.frame(width: 30,height: 30)
-    //          }
-    //        }
-    //      }
-      .onChange(of: isFocussed){
-        saveNote()
-      }
-      .onChange(of:range){
-        //print(range)
-      }
+    uiTextView(noteContent: $noteContent, gRanges: $gRanges)//get textview Content
   }
-
-  //  func getAttributeString(_ str:String)   ->AttributedString{
-  //    var attributeString = AttributedString(str)
-  //
-  //  }
-
-
 
 }//:Extension
 
 struct uiTextView : UIViewRepresentable {
 
   @Binding var noteContent :String
-  //@Binding var range: NSRange
+  @Binding var gRanges: [NSRange]
 
   func makeUIView(context: Context) -> some UITextView {
     let textView = UITextView()
+    //noteContent = textView.text
     textView.font = UIFont.boldSystemFont(ofSize: 23)
     textView.delegate = context.coordinator
 
@@ -213,85 +170,63 @@ struct uiTextView : UIViewRepresentable {
   }
 
   func updateUIView(_ uiView: UIViewType, context: Context) {
-    uiView.text = noteContent
+    noteContent = uiView.text
     context.coordinator.textView = uiView
   }
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(noteContent:$noteContent)
+    Coordinator(noteContent:$noteContent,gRanges:$gRanges)
   }
+
   class Coordinator : NSObject,UITextViewDelegate {
-    weak var textView:UITextView?
-    var Range : [NSRange] = []
-
+    weak var textView:UITextView!
     @Binding var noteContent : String
+    @Binding var gRanges: [NSRange]
 
-    init(noteContent : Binding<String>){
+    init(noteContent : Binding<String>,gRanges : Binding<[NSRange]>){
       _noteContent = noteContent
+      _gRanges = gRanges
     }
 
     func textViewDidChange(_ textView: UITextView) {
+
+      let BgBlackAtr : [NSAttributedString.Key:Any] = [
+        .backgroundColor : UIColor.clear,
+        .font : UIFont.boldSystemFont(ofSize: 23)]
+      textView.typingAttributes = BgBlackAtr
+      noteContent = textView.text
+      let indexRange = textView.text.startIndex..<textView.text.endIndex
+      let NSindexRange = NSRange(indexRange,in: textView.text)
+      // print(NSindexRange)
+
+      textView.attributedText.enumerateAttribute(
+        .backgroundColor,
+        in: NSindexRange,
+        using: { atr, atrange, _ in
+          if let BgAtr = atr as? UIColor{
+            print(BgAtr)
+            print(atrange)
+          }
+      })
     }
-    //
-    //    func textViewDidChangeSelection(_ textView: UITextView) {
-    //
-    //    }
 
     @objc func addAttribute(sender:AnyObject) {
 
-      let range = textView!.selectedRange
-      let Location = range.location
-      let Length = range.length
-      let attrText = NSMutableAttributedString(string: textView!.text)
+      let Trange = textView.selectedRange
 
-      if Length != 0 {
-        if Range.count != 0 {
-          //MARK: -Double Check
-          if Range.filter({$0 == range}) == [] {
-            //no Double
-            Range.append(range)
-          }else{
-            Range.removeAll(where: {$0 == range})
-            print("DeleteBackground")
-          }
-          //MARK: -Other Check
-          Range.removeAll(where: {$0.location == Location && $0.length < Length})
+      let mutableAtrString = NSMutableAttributedString(attributedString: textView.attributedText)
+      let BgGreenAtr : [NSAttributedString.Key:Any] = [
+        .backgroundColor : UIColor.green,
+        .font : UIFont.boldSystemFont(ofSize: 23)]
+      mutableAtrString.setAttributes(BgGreenAtr,range: Trange)
+      textView.attributedText = mutableAtrString
 
-          for (index,_) in Range.enumerated(){
-            let EndPoint = Range[index].location + Range[index].length
 
-            if textView!.text.count - EndPoint < 0 {
-              //outRanged
-              let LostCount = EndPoint - textView!.text.count
-              print(LostCount)
 
-              if LostCount < Length + 1 {
-                //Replace Length
-                Range[index] = NSMakeRange(Range[index].location, Length-LostCount)
-                print("Replaced")
-              }else if LostCount >= Length + 1{
-                //Delete range
-                Range.remove(at: index)
-                print("deleteOutOfRange")
-              }
-
-            }//:if
-          }//:For
-
-        }else{
-          Range.append(range)
-        }
-        print(Range)
-        Range.forEach(){
-          attrText.addAttribute(.backgroundColor, value: UIColor.red, range: NSRange(location: $0.location, length:$0.length))
-        }
-        textView!.attributedText = attrText
-      }
     }//:Atribute
-
-
   }
 }
+
 
 
 

@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		1EEB34082BDE13D600326204 /* NoteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB34072BDE13D600326204 /* NoteList.swift */; };
 		1EEB340A2BDE478B00326204 /* NewNote.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB34092BDE478B00326204 /* NewNote.swift */; };
-		1EEB340C2BE203E700326204 /* UiTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EEB340B2BE203E700326204 /* UiTextView.swift */; };
 		1EFA875F2BD8FD90003009A4 /* UtaMemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA875E2BD8FD90003009A4 /* UtaMemoApp.swift */; };
 		1EFA87612BD8FD90003009A4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EFA87602BD8FD90003009A4 /* ContentView.swift */; };
 		1EFA87632BD8FD91003009A4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1EFA87622BD8FD91003009A4 /* Assets.xcassets */; };
@@ -25,7 +24,6 @@
 /* Begin PBXFileReference section */
 		1EEB34072BDE13D600326204 /* NoteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteList.swift; sourceTree = "<group>"; };
 		1EEB34092BDE478B00326204 /* NewNote.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewNote.swift; sourceTree = "<group>"; };
-		1EEB340B2BE203E700326204 /* UiTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UiTextView.swift; sourceTree = "<group>"; };
 		1EFA875B2BD8FD90003009A4 /* UtaMemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UtaMemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EFA875E2BD8FD90003009A4 /* UtaMemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtaMemoApp.swift; sourceTree = "<group>"; };
 		1EFA87602BD8FD90003009A4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -113,7 +111,6 @@
 			isa = PBXGroup;
 			children = (
 				1EFA87862BDBB492003009A4 /* NoteModel.swift */,
-				1EEB340B2BE203E700326204 /* UiTextView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -198,7 +195,6 @@
 				1EFA87832BDA8113003009A4 /* floatingButton.swift in Sources */,
 				1EEB34082BDE13D600326204 /* NoteList.swift in Sources */,
 				1EEB340A2BDE478B00326204 /* NewNote.swift in Sources */,
-				1EEB340C2BE203E700326204 /* UiTextView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

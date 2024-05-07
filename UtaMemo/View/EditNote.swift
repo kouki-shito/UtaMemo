@@ -18,6 +18,7 @@ struct EditNote: View {
   @State private var CanRedo : Bool = false
   @FocusState var isFocussed : Bool
   @Bindable var updateNote : NoteModel
+  @State var updateContent :String = ""
 
   var body: some View {
 
@@ -30,7 +31,9 @@ struct EditNote: View {
       navigationArea
       ,alignment: .top
     )
-
+    .onAppear(){
+      updateContent = updateNote.content
+    }
   }//:body
 
 }//:View
@@ -38,6 +41,7 @@ struct EditNote: View {
 extension EditNote {
 
   private func saveNote(){
+    updateNote.content = updateContent
     try? context.save()
   }
 
@@ -120,50 +124,82 @@ extension EditNote {
       .fontWeight(.heavy)
       .padding()
       .focused($isFocussed)
-      .onChange(of: isFocussed){
-        saveNote()
-      }
   }
 
   private var noteArea : some View {
-
-    TextEditor(text: $updateNote.content)
-      .autocorrectionDisabled(true)
-      .font(.title2)
-      .fontWeight(.bold)
-      .padding(.horizontal,20)
-      .focused($isFocussed)
-      .scrollContentBackground(.hidden)
-      .toolbar{
-        ToolbarItemGroup(placement:.keyboard){
-          //KeyBoardToolBar
-          Button{
-
-          }label: {
-            Image(systemName: "rectangle.inset.fill")
-              .foregroundColor(.yellow)
-              .font(.title2)
-            //.frame(width: 30,height: 30)
-          }
-          Spacer()
-          Button{
-
-          }label: {
-            Image(systemName: "pencil.circle")
-              .foregroundColor(.blue)
-              .font(.title2)
-            //.frame(width: 30,height: 30)
-          }
-        }
-      }
-      .onChange(of: isFocussed){
-        saveNote()
-      }
+    EditUiTextView(updateContent: $updateContent, updateNote: updateNote)//get textview Content
   }
-
-
 }//:Extension
 
+struct EditUiTextView : UIViewRepresentable {
+
+  @Binding var updateContent :String
+  @Bindable var updateNote :NoteModel
+
+  func makeUIView(context: Context) -> some UITextView {
+    let textView = UITextView()
+    textView.text = updateNote.content
+    textView.font = UIFont.boldSystemFont(ofSize: 23)
+    textView.delegate = context.coordinator
+
+    let toolbar = UIToolbar(frame: CGRect(
+      x: .zero,
+      y: .zero,
+      width: textView.frame.size.width,
+      height: 44))
+
+    let attrButton = UIBarButtonItem(
+      barButtonSystemItem:.camera,
+      target: context.coordinator,
+      action: #selector(context.coordinator.addAttribute(sender:)))
+
+    toolbar.setItems([attrButton], animated: true)
+    textView.inputAccessoryView = toolbar
+
+    return textView
+
+  }
+
+  func updateUIView(_ uiView: UIViewType, context: Context) {
+    updateContent = uiView.text
+    context.coordinator.textView = uiView
+  }
+
+  func makeCoordinator() -> Coordinator {
+    Coordinator(updateContent:$updateContent)
+  }
+
+  class Coordinator : NSObject,UITextViewDelegate {
+    weak var textView:UITextView!
+    @Binding var updateContent : String
+    var Range : [NSRange] = []
+
+    init(updateContent : Binding<String>){
+      _updateContent = updateContent
+    }
+
+    func textViewDidChange(_ textView: UITextView) {
+
+      let BgBlackAtr : [NSAttributedString.Key:Any] = [
+        .backgroundColor : UIColor.clear,
+        .font : UIFont.boldSystemFont(ofSize: 23)]
+      textView.typingAttributes = BgBlackAtr
+      updateContent = textView.text
+    }
+
+    @objc func addAttribute(sender:AnyObject) {
+
+      let Trange = textView.selectedRange
+
+      let mutableAtrString = NSMutableAttributedString(attributedString: textView.attributedText)
+      let BgGreenAtr : [NSAttributedString.Key:Any] = [
+        .backgroundColor : UIColor.green,
+        .font : UIFont.boldSystemFont(ofSize: 23)]
+      mutableAtrString.setAttributes(BgGreenAtr,range: Trange)
+      textView.attributedText = mutableAtrString
+    }//:Atribute
+  }
+}
 
 
 #Preview {

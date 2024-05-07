@@ -14,12 +14,13 @@ final class NoteModel {
   var content: String = ""
   var title : String = ""
   var createdAt: Date
-  var updatedAt: Date
+  var GRange : [NSRange] = []
 
-  init(content: String,title:String) {
+
+  init(content: String,title:String,GRange:[NSRange]) {
     self.content = content
     self.title = title
+    self.GRange = GRange
     createdAt = Date()
-    updatedAt = Date()
   }
 }
