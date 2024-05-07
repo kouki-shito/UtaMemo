@@ -19,6 +19,7 @@ struct NewNote: View {
   @State private var CanRedo : Bool = false
   @State private var AtRanges : [NSRange] = []
   @FocusState var isFocussed : Bool
+  @State private var NoteFocus : Bool = false
 
   var body: some View {
 
@@ -31,7 +32,7 @@ struct NewNote: View {
       navigationArea
       ,alignment: .top
     )
-    .onChange(of:isFocussed){
+    .onChange(of:isFocussed || NoteFocus){
       saveNote()
     }
   }//:body
@@ -53,7 +54,7 @@ extension NewNote {
       //MARK: -BACKANDFOCUS
       HStack{
         Button{
-          if isFocussed == false{
+          if isFocussed == false && NoteFocus == false{
             //Back Home
             if noteContent == "" && noteTitle == ""{
 
@@ -65,14 +66,15 @@ extension NewNote {
           }else{
             //disable Note Focus
             isFocussed = false
+            NoteFocus = false
           }
         }label: {
           Image(
-            systemName:isFocussed == false ? "chevron.backward":"checkmark.circle")
+            systemName:isFocussed == false && NoteFocus == false ? "chevron.backward":"checkmark.circle")
           .font(.title)
           .fontWeight(.bold)
           .foregroundColor(
-            isFocussed == false ? .black : .green)
+            isFocussed == false && NoteFocus == false ? .primary : .green)
         }
         .animation(.linear(duration: 0.1),
                    value: isFocussed)
@@ -85,15 +87,15 @@ extension NewNote {
       }label: {
         Image(systemName: "arrow.backward")
           .font(.title2)
-          .opacity(isFocussed == true ? 1 : 0)
+          .opacity(isFocussed == true || NoteFocus == true ? 1 : 0)
 
       }
       .padding(.leading)
       .frame(width: 40,height: 40)
-      .disabled(!isFocussed || !CanUndo)
+      .disabled(!isFocussed || !CanUndo || !NoteFocus)
       .animation(
         .linear(duration: 0.1),
-        value:isFocussed)
+        value:isFocussed || NoteFocus)
 
       Button{
         //Redo
@@ -101,11 +103,11 @@ extension NewNote {
         Image(systemName: "arrow.forward")
           .font(.title2)
           .opacity(
-            isFocussed == true ? 1 : 0)
+            isFocussed == true || NoteFocus == true ? 1 : 0)
       }
       .frame(width: 40,height: 40,alignment: .center)
-      .disabled(!isFocussed || !CanRedo)
-      .animation(.linear(duration: 0.1), value:isFocussed)
+      .disabled(!isFocussed || !CanRedo || !NoteFocus)
+      .animation(.linear(duration: 0.1), value:isFocussed || NoteFocus)
 
       //MARK: -MENUBUTTON
       HStack{
@@ -123,7 +125,6 @@ extension NewNote {
     .frame(height: 30)
     .padding(.horizontal)
     .padding(.vertical)
-    .background(.white)
   }
 
   private var titleArea : some View {
@@ -135,7 +136,7 @@ extension NewNote {
   }
 
   private var noteArea : some View {
-    uiTextView(noteContent: $noteContent, AtRanges: $AtRanges)//get textview Content
+    uiTextView(noteContent: $noteContent, AtRanges: $AtRanges,NoteFocus: $NoteFocus)//get textview Content
   }
 
 }//:Extension
@@ -144,6 +145,7 @@ struct uiTextView : UIViewRepresentable {
 
   @Binding var noteContent :String
   @Binding var AtRanges: [NSRange]
+  @Binding var NoteFocus : Bool
 
   func makeUIView(context: Context) -> some UITextView {
     let textView = UITextView()
@@ -172,20 +174,27 @@ struct uiTextView : UIViewRepresentable {
   func updateUIView(_ uiView: UIViewType, context: Context) {
     noteContent = uiView.text
     context.coordinator.textView = uiView
+    if NoteFocus{
+      uiView.becomeFirstResponder()
+    }else{
+      uiView.resignFirstResponder()
+    }
   }
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(noteContent:$noteContent,AtRanges:$AtRanges)
+    Coordinator(noteContent:$noteContent,AtRanges:$AtRanges,NoteFocus:$NoteFocus)
   }
 
   class Coordinator : NSObject,UITextViewDelegate {
     weak var textView:UITextView!
     @Binding var noteContent : String
     @Binding var AtRanges: [NSRange]
+    @Binding var NoteFocus : Bool
 
-    init(noteContent : Binding<String>,AtRanges : Binding<[NSRange]>){
+    init(noteContent : Binding<String>,AtRanges : Binding<[NSRange]>,NoteFocus:Binding<Bool>){
       _noteContent = noteContent
       _AtRanges = AtRanges
+      _NoteFocus = NoteFocus
     }
 
     func textViewDidChange(_ textView: UITextView) {
@@ -212,6 +221,10 @@ struct uiTextView : UIViewRepresentable {
       })
       print(AtRanges)
     }//:DidChange
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+      NoteFocus = true
+    }
 
     @objc func addAttribute(sender:AnyObject) {
 

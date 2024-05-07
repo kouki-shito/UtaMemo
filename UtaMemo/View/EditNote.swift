@@ -20,6 +20,7 @@ struct EditNote: View {
   @Bindable var updateNote : NoteModel
   @State var updateContent :String = ""
   @State var updateRanges : [NSRange] = []
+  @State var updFocus : Bool = false
 
   var body: some View {
 
@@ -54,24 +55,25 @@ extension EditNote {
       //MARK: -BACKANDFOCUS
       HStack{
         Button{
-          if isFocussed == false{
+          if isFocussed == false && updFocus == false{
             //Back Home
             saveNote()
             dismiss()
           }else{
             //disable Note Focus
             isFocussed = false
+            updFocus = false
           }
         }label: {
           Image(
-            systemName:isFocussed == false ? "chevron.backward":"checkmark.circle")
+            systemName:isFocussed == false && updFocus == false ? "chevron.backward":"checkmark.circle")
           .font(.title)
           .fontWeight(.bold)
           .foregroundColor(
-            isFocussed == false ? .black : .green)
+            isFocussed == false && updFocus == false ? .primary : .green)
         }
         .animation(.linear(duration: 0.1),
-                   value: isFocussed)
+                   value: isFocussed || updFocus)
         Spacer(minLength: 0)
       }
 
@@ -81,15 +83,15 @@ extension EditNote {
       }label: {
         Image(systemName: "arrow.backward")
           .font(.title2)
-          .opacity(isFocussed == true ? 1 : 0)
+          .opacity(isFocussed == true || updFocus == true ? 1 : 0)
 
       }
       .padding(.leading)
       .frame(width: 40,height: 40)
-      .disabled(!isFocussed || !CanUndo)
+      .disabled(!isFocussed || !CanUndo || !updFocus)
       .animation(
         .linear(duration: 0.1),
-        value:isFocussed)
+        value:isFocussed || updFocus)
 
       Button{
         //Redo
@@ -97,11 +99,11 @@ extension EditNote {
         Image(systemName: "arrow.forward")
           .font(.title2)
           .opacity(
-            isFocussed == true ? 1 : 0)
+            isFocussed == true || updFocus == true ? 1 : 0)
       }
       .frame(width: 40,height: 40,alignment: .center)
-      .disabled(!isFocussed || !CanRedo)
-      .animation(.linear(duration: 0.1), value:isFocussed)
+      .disabled(!isFocussed || !CanRedo || !updFocus)
+      .animation(.linear(duration: 0.1), value:isFocussed || updFocus)
 
       //MARK: -MENUBUTTON
       HStack{
@@ -119,7 +121,6 @@ extension EditNote {
     .frame(height: 30)
     .padding(.horizontal)
     .padding(.vertical)
-    .background(.white)
   }
 
   private var titleArea : some View {
@@ -131,7 +132,7 @@ extension EditNote {
   }
 
   private var noteArea : some View {
-    EditUiTextView(updateContent: $updateContent, updateRanges: $updateRanges, updateNote: updateNote)//get textview Content
+    EditUiTextView(updateContent: $updateContent, updateRanges: $updateRanges, updateNote: updateNote,updFocus : $updFocus)//get textview Content
   }
 }//:Extension
 
@@ -140,13 +141,13 @@ struct EditUiTextView : UIViewRepresentable {
   @Binding var updateContent :String
   @Binding var updateRanges : [NSRange]
   @Bindable var updateNote :NoteModel
+  @Binding var updFocus : Bool
 
   func makeUIView(context: Context) -> some UITextView {
     let textView = UITextView()
     textView.text = updateNote.content
     textView.font = UIFont.boldSystemFont(ofSize: 23)
     textView.delegate = context.coordinator
-
 
     let mutableAtrString = NSMutableAttributedString(attributedString: textView.attributedText)
     let BgGreenAtr : [NSAttributedString.Key:Any] = [
@@ -178,20 +179,27 @@ struct EditUiTextView : UIViewRepresentable {
   func updateUIView(_ uiView: UIViewType, context: Context) {
     updateContent = uiView.text
     context.coordinator.textView = uiView
+    if updFocus{
+      uiView.becomeFirstResponder()
+    }else{
+      uiView.resignFirstResponder()
+    }
   }
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(updateContent:$updateContent,updateRanges: $updateRanges)
+    Coordinator(updateContent:$updateContent,updateRanges: $updateRanges,updFocus:$updFocus)
   }
 
   class Coordinator : NSObject,UITextViewDelegate {
     weak var textView:UITextView!
     @Binding var updateContent : String
     @Binding var updateRanges : [NSRange]
+    @Binding var updFocus : Bool
 
-    init(updateContent : Binding<String>,updateRanges:Binding<[NSRange]>){
+    init(updateContent : Binding<String>,updateRanges:Binding<[NSRange]>,updFocus:Binding<Bool>){
       _updateContent = updateContent
       _updateRanges = updateRanges
+      _updFocus = updFocus
     }
 
     func textViewDidChange(_ textView: UITextView) {
@@ -217,8 +225,11 @@ struct EditUiTextView : UIViewRepresentable {
             }
           }
         })
-      print(updateRanges)
     }//:DidChange
+
+    func textViewDidBeginEditing(_ textView: UITextView) {
+      updFocus = true
+    }
 
     @objc func addAttribute(sender:AnyObject) {
 
@@ -246,8 +257,6 @@ struct EditUiTextView : UIViewRepresentable {
             }
           }
         })
-      print(updateRanges)
-
     }//:Atribute
   }
 }
