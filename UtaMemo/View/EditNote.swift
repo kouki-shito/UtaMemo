@@ -19,6 +19,7 @@ struct EditNote: View {
   @FocusState var isFocussed : Bool
   @Bindable var updateNote : NoteModel
   @State var updateContent :String = ""
+  @State var updateRanges : [NSRange] = []
 
   var body: some View {
 
@@ -32,7 +33,9 @@ struct EditNote: View {
       ,alignment: .top
     )
     .onAppear(){
+      //link swift data
       updateContent = updateNote.content
+      updateRanges = updateNote.AtRange
     }
   }//:body
 
@@ -42,6 +45,7 @@ extension EditNote {
 
   private func saveNote(){
     updateNote.content = updateContent
+    updateNote.AtRange = updateRanges
     try? context.save()
   }
 
@@ -127,13 +131,14 @@ extension EditNote {
   }
 
   private var noteArea : some View {
-    EditUiTextView(updateContent: $updateContent, updateNote: updateNote)//get textview Content
+    EditUiTextView(updateContent: $updateContent, updateRanges: $updateRanges, updateNote: updateNote)//get textview Content
   }
 }//:Extension
 
 struct EditUiTextView : UIViewRepresentable {
 
   @Binding var updateContent :String
+  @Binding var updateRanges : [NSRange]
   @Bindable var updateNote :NoteModel
 
   func makeUIView(context: Context) -> some UITextView {
@@ -141,6 +146,16 @@ struct EditUiTextView : UIViewRepresentable {
     textView.text = updateNote.content
     textView.font = UIFont.boldSystemFont(ofSize: 23)
     textView.delegate = context.coordinator
+
+
+    let mutableAtrString = NSMutableAttributedString(attributedString: textView.attributedText)
+    let BgGreenAtr : [NSAttributedString.Key:Any] = [
+      .backgroundColor : UIColor.green,
+      .font : UIFont.boldSystemFont(ofSize: 23)]
+    updateNote.AtRange.forEach(){
+      mutableAtrString.setAttributes(BgGreenAtr,range: $0)
+    }
+    textView.attributedText = mutableAtrString
 
     let toolbar = UIToolbar(frame: CGRect(
       x: .zero,
@@ -166,16 +181,17 @@ struct EditUiTextView : UIViewRepresentable {
   }
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(updateContent:$updateContent)
+    Coordinator(updateContent:$updateContent,updateRanges: $updateRanges)
   }
 
   class Coordinator : NSObject,UITextViewDelegate {
     weak var textView:UITextView!
     @Binding var updateContent : String
-    var Range : [NSRange] = []
+    @Binding var updateRanges : [NSRange]
 
-    init(updateContent : Binding<String>){
+    init(updateContent : Binding<String>,updateRanges:Binding<[NSRange]>){
       _updateContent = updateContent
+      _updateRanges = updateRanges
     }
 
     func textViewDidChange(_ textView: UITextView) {
@@ -185,7 +201,24 @@ struct EditUiTextView : UIViewRepresentable {
         .font : UIFont.boldSystemFont(ofSize: 23)]
       textView.typingAttributes = BgBlackAtr
       updateContent = textView.text
-    }
+
+      //save attributes and share
+      let indexRange = textView.text.startIndex..<textView.text.endIndex
+      let NSindexRange = NSRange(indexRange,in: textView.text)
+      updateRanges = []
+
+      textView.attributedText.enumerateAttribute(
+        .backgroundColor,
+        in: NSindexRange,
+        using: { atr, atrange, _ in
+          if let BgAtr = atr as? UIColor{
+            if BgAtr == UIColor.green{
+              updateRanges.append(atrange)
+            }
+          }
+        })
+      print(updateRanges)
+    }//:DidChange
 
     @objc func addAttribute(sender:AnyObject) {
 
@@ -197,6 +230,24 @@ struct EditUiTextView : UIViewRepresentable {
         .font : UIFont.boldSystemFont(ofSize: 23)]
       mutableAtrString.setAttributes(BgGreenAtr,range: Trange)
       textView.attributedText = mutableAtrString
+
+      //save attributes and share
+      let indexRange = textView.text.startIndex..<textView.text.endIndex
+      let NSindexRange = NSRange(indexRange,in: textView.text)
+      updateRanges = []
+
+      textView.attributedText.enumerateAttribute(
+        .backgroundColor,
+        in: NSindexRange,
+        using: { atr, atrange, _ in
+          if let BgAtr = atr as? UIColor{
+            if BgAtr == UIColor.green{
+              updateRanges.append(atrange)
+            }
+          }
+        })
+      print(updateRanges)
+
     }//:Atribute
   }
 }

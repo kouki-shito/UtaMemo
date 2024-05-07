@@ -14,13 +14,13 @@ final class NoteModel {
   var content: String = ""
   var title : String = ""
   var createdAt: Date
-  var GRange : [NSRange] = []
+  var AtRange : [NSRange] = []
 
 
-  init(content: String,title:String,GRange:[NSRange]) {
+  init(content: String,title:String,AtRange:[NSRange]) {
     self.content = content
     self.title = title
-    self.GRange = GRange
+    self.AtRange = AtRange
     createdAt = Date()
   }
 }

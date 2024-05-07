@@ -17,7 +17,7 @@ struct NewNote: View {
   @State private var noteTitle : String = ""
   @State private var CanUndo : Bool = false
   @State private var CanRedo : Bool = false
-  @State private var gRanges : [NSRange] = []
+  @State private var AtRanges : [NSRange] = []
   @FocusState var isFocussed : Bool
 
   var body: some View {
@@ -41,7 +41,7 @@ struct NewNote: View {
 extension NewNote {
 
   private func addNote(){
-    let newNote = NoteModel(content: noteContent,title: noteTitle,GRange: gRanges)
+    let newNote = NoteModel(content: noteContent,title: noteTitle,AtRange: AtRanges)
     context.insert(newNote)
   }
   private func saveNote(){
@@ -135,7 +135,7 @@ extension NewNote {
   }
 
   private var noteArea : some View {
-    uiTextView(noteContent: $noteContent, gRanges: $gRanges)//get textview Content
+    uiTextView(noteContent: $noteContent, AtRanges: $AtRanges)//get textview Content
   }
 
 }//:Extension
@@ -143,7 +143,7 @@ extension NewNote {
 struct uiTextView : UIViewRepresentable {
 
   @Binding var noteContent :String
-  @Binding var gRanges: [NSRange]
+  @Binding var AtRanges: [NSRange]
 
   func makeUIView(context: Context) -> some UITextView {
     let textView = UITextView()
@@ -175,17 +175,17 @@ struct uiTextView : UIViewRepresentable {
   }
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(noteContent:$noteContent,gRanges:$gRanges)
+    Coordinator(noteContent:$noteContent,AtRanges:$AtRanges)
   }
 
   class Coordinator : NSObject,UITextViewDelegate {
     weak var textView:UITextView!
     @Binding var noteContent : String
-    @Binding var gRanges: [NSRange]
+    @Binding var AtRanges: [NSRange]
 
-    init(noteContent : Binding<String>,gRanges : Binding<[NSRange]>){
+    init(noteContent : Binding<String>,AtRanges : Binding<[NSRange]>){
       _noteContent = noteContent
-      _gRanges = gRanges
+      _AtRanges = AtRanges
     }
 
     func textViewDidChange(_ textView: UITextView) {
@@ -195,20 +195,23 @@ struct uiTextView : UIViewRepresentable {
         .font : UIFont.boldSystemFont(ofSize: 23)]
       textView.typingAttributes = BgBlackAtr
       noteContent = textView.text
+      //save attributes and share
       let indexRange = textView.text.startIndex..<textView.text.endIndex
       let NSindexRange = NSRange(indexRange,in: textView.text)
-      // print(NSindexRange)
+      AtRanges = []
 
       textView.attributedText.enumerateAttribute(
         .backgroundColor,
         in: NSindexRange,
         using: { atr, atrange, _ in
           if let BgAtr = atr as? UIColor{
-            print(BgAtr)
-            print(atrange)
+            if BgAtr == UIColor.green{
+              AtRanges.append(atrange)
+            }
           }
       })
-    }
+      print(AtRanges)
+    }//:DidChange
 
     @objc func addAttribute(sender:AnyObject) {
 
@@ -221,8 +224,20 @@ struct uiTextView : UIViewRepresentable {
       mutableAtrString.setAttributes(BgGreenAtr,range: Trange)
       textView.attributedText = mutableAtrString
 
-
-
+      let indexRange = textView.text.startIndex..<textView.text.endIndex
+      let NSindexRange = NSRange(indexRange,in: textView.text)
+      AtRanges = []
+      textView.attributedText.enumerateAttribute(
+        .backgroundColor,
+        in: NSindexRange,
+        using: { atr, atrange, _ in
+          if let BgAtr = atr as? UIColor{
+            if BgAtr == UIColor.green{
+              AtRanges.append(atrange)
+            }
+          }
+        })
+      print(AtRanges)
     }//:Atribute
   }
 }
